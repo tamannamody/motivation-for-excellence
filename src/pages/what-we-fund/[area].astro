@@ -1,0 +1,193 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import PartnerCard from '../../components/PartnerCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Arrow from '../../components/Arrow.astro';
+import { areas, areaOrder, partnersIn, bySlug, summary, type AreaSlug } from '../../lib/site';
+import { img } from '../../lib/images';
+
+export function getStaticPaths() {
+  return areaOrder.map((area) => ({ params: { area } }));
+}
+
+const slug = Astro.params.area as AreaSlug;
+const a = areas[slug];
+const list = partnersIn(slug);
+const highlights = a.highlights.map((s) => bySlug(s)!).filter(Boolean);
+const rest = list.filter((p) => !a.highlights.includes(p.slug));
+const places = [...new Set(list.flatMap((p) => (p.panIndia ? ['Pan-India', ...p.states] : p.states)))].sort();
+const others = areaOrder.filter((o) => o !== slug);
+---
+
+<Base title={a.title} description={`${a.tagline} ${a.intro}`.slice(0, 158)} image={img(a.image)}>
+  <PageHero
+    eyebrow={`What we fund · ${list.length} partners`}
+    title={a.title}
+    lead={a.intro}
+    image={img(a.image)}
+    crumbs={[{ href: '/what-we-fund/', label: 'What we fund' }, { href: `/what-we-fund/${slug}/`, label: a.title }]}
+  >
+    <p class="tagline">{a.tagline}</p>
+    {places.length > 0 && (
+      <ul class="places" aria-label="Where our partners work">
+        {places.map((s) => <li class="chip">{s}</li>)}
+      </ul>
+    )}
+  </PageHero>
+
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Spotlight</span>
+        <h2>Work we are proud to support.</h2>
+      </div>
+      <div class="spot">
+        {
+          highlights.map((p) => (
+            <article class="spot-item reveal">
+              <PartnerCard partner={p} />
+              <p class="spot-sum">{summary(p, 220)}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    rest.length > 0 && (
+      <section class="section--tight">
+        <div class="wrap">
+          <div class="head-row">
+            <h2>All {a.short.toLowerCase()} partners</h2>
+            <a class="link-arrow" href={`/partners/?area=${slug}`}>
+              Open in the partner directory <Arrow size={16} />
+            </a>
+          </div>
+          <div class="grid">
+            {rest.map((p) => (
+              <PartnerCard partner={p} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section--tight">
+    <div class="wrap">
+      <h2 class="other-h">Other areas</h2>
+      <div class="others">
+        {
+          others.map((o) => (
+            <a href={`/what-we-fund/${o}/`} class="other">
+              <span>{areas[o].title}</span>
+              <small>{areas[o].tagline}</small>
+              <Arrow size={20} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--step-2);
+    color: var(--navy);
+  }
+  .places {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .spot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .spot-item {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+  .spot-sum {
+    color: var(--muted);
+    font-size: 0.96rem;
+  }
+  .head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .head-row h2,
+  .other-h {
+    font-size: var(--step-3);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .other-h {
+    margin-bottom: 24px;
+  }
+  .others {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .other {
+    position: relative;
+    display: grid;
+    gap: 6px;
+    padding: 28px 64px 28px 28px;
+    border-radius: var(--radius);
+    background: var(--white);
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .other span {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+  }
+  .other small {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .other :global(svg) {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    translate: 0 -50%;
+    color: var(--navy);
+  }
+  .other:hover {
+    background: var(--navy);
+    color: var(--white);
+  }
+  .other:hover small,
+  .other:hover :global(svg) {
+    color: var(--teal-300);
+  }
+  @media (max-width: 900px) {
+    .spot,
+    .others {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

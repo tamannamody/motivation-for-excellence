@@ -1,0 +1,79 @@
+---
+import Arrow from './Arrow.astro';
+interface Props { title?: string; body?: string }
+const {
+  title = 'Doing work that deserves to grow?',
+  body = 'We partner with organisations building innovative, pragmatic and cost-effective solutions for India’s rural and tribal communities. We also welcome philanthropists, companies and foundations who want to co-fund what works.',
+} = Astro.props;
+---
+
+<section class="section--tight">
+  <div class="wrap">
+    <div class="band on-dark reveal">
+      <div class="stripes deco" aria-hidden="true"></div>
+      <div class="copy">
+        <h2>{title}</h2>
+        <p class="lead">{body}</p>
+      </div>
+      <div class="actions">
+        <a class="btn btn--teal" href="/work-with-us/">Work with us <Arrow /></a>
+        <a class="btn btn--ghost" href="/contact/">Contact the team</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 32px;
+    align-items: end;
+    padding: clamp(36px, 6vw, 72px);
+    border-radius: calc(var(--radius) + 8px);
+    background: var(--navy);
+  }
+  .deco {
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 280px;
+    height: 280px;
+    opacity: 0.35;
+    border-radius: 40px;
+    transform: rotate(8deg);
+  }
+  .copy {
+    position: relative;
+    display: grid;
+    gap: 18px;
+  }
+  h2 {
+    font-size: var(--step-4);
+    color: var(--white);
+  }
+  .actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+  @media (max-width: 860px) {
+    .band {
+      grid-template-columns: 1fr;
+    }
+    .actions {
+      justify-content: flex-start;
+    }
+    .deco {
+      width: 140px;
+      height: 140px;
+      right: -50px;
+      top: -50px;
+      opacity: 0.25;
+    }
+  }
+</style>

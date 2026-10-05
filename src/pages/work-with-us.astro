@@ -1,0 +1,228 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Arrow from '../components/Arrow.astro';
+import { site, values, coFunders, areas, areaOrder } from '../lib/site';
+import { img } from '../lib/images';
+
+const include = [
+  { t: 'Who you are', b: 'Your organisation, its registration, and the communities you work with.' },
+  { t: 'The programme', b: 'What you do, where, and which of our four areas it fits.' },
+  { t: 'The evidence', b: 'What has worked so far, and how you measure it.' },
+  { t: 'The ask', b: 'What support would help, over what period, and what it would make possible.' },
+];
+---
+
+<Base
+  title="Work with us"
+  description="How NGOs, philanthropists and companies can partner with Motivation for Excellence (MFE) on healthcare, education and livelihoods for rural and tribal India."
+  image={img('site/palavee.webp')}
+>
+  <PageHero
+    eyebrow="Work with us"
+    title="Let’s build something that lasts."
+    lead="We provide support to, and partner with, organisations working on innovative, sustainable and cost-effective solutions. We also collaborate with philanthropists, companies and other not-for-profits who share the goal."
+    image={img('site/palavee.webp')}
+    imageAlt="Anganwadi workers holding learning materials at a Palavee early childhood programme training"
+    crumbs={[{ href: '/work-with-us/', label: 'Work with us' }]}
+  >
+    <div class="jump">
+      <a class="btn" href="#ngos">For NGOs <Arrow /></a>
+      <a class="btn btn--ghost" href="#funders">For co-funders</a>
+    </div>
+  </PageHero>
+
+  <section class="section on-dark" id="ngos">
+    <div class="wrap split">
+      <div class="section-head">
+        <span class="eyebrow">For NGOs</span>
+        <h2>What we look for.</h2>
+        <p class="lead">
+          We partner with organisations that implement programmes on the ground in
+          {areaOrder.map((a, i) => <>{i > 0 && (i === areaOrder.length - 1 ? ' and ' : ', ')}<a href={`/what-we-fund/${a}/`}>{areas[a].title.toLowerCase()}</a></>)},
+          especially with rural, tribal and low-income communities.
+        </p>
+      </div>
+      <ul class="checks">
+        {
+          values.map((v) => (
+            <li>
+              <span class="tick" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="m5 12 5 5 9-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div>
+                <h3>{v.title}</h3>
+                <p>{v.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Getting in touch</span>
+        <h2>Start with a short note.</h2>
+        <p class="lead">
+          There is no application form. Write to us at <a href={`mailto:${site.email}`}>{site.email}</a> with a page or two
+          covering the points below, and we will be in touch if there is a fit.
+        </p>
+      </div>
+      <ol class="steps">
+        {
+          include.map((s, i) => (
+            <li class="reveal">
+              <span class="n">{i + 1}</span>
+              <h3>{s.t}</h3>
+              <p>{s.b}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <a class="btn mail" href={`mailto:${site.email}?subject=Partnership%20enquiry`}>Write to us <Arrow /></a>
+    </div>
+  </section>
+
+  <section class="section on-dark funders" id="funders">
+    <div class="wrap split">
+      <div class="section-head">
+        <span class="eyebrow">For co-funders</span>
+        <h2>Fund what works, together.</h2>
+        <p class="lead">
+          Philanthropists, foundations and CSR teams can co-fund programmes we already know well. We bring more than a decade of partner
+          relationships and field knowledge; you bring reach. Some of the partners we already co-fund with:
+        </p>
+        <a class="btn btn--teal" href={`mailto:${site.email}?subject=Co-funding%20enquiry`}>Talk to us about co-funding <Arrow /></a>
+      </div>
+      <ul class="cof">
+        {
+          coFunders.map((c) => (
+            <li>
+              <h3>{c.name}</h3>
+              <p>{c.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .on-dark h2 {
+    color: var(--white);
+  }
+  .on-dark .lead a {
+    color: var(--teal-300);
+  }
+  .checks,
+  .cof {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .checks li {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 16px;
+    padding: 20px;
+    border-radius: var(--radius-sm);
+    background: rgb(255 255 255 / 0.06);
+  }
+  .tick {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--teal);
+    color: var(--navy-950);
+  }
+  .checks h3,
+  .cof h3 {
+    font-size: var(--step-1);
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .checks p,
+  .cof p {
+    color: #c3cde9;
+  }
+  .steps {
+    list-style: none;
+    margin: 0 0 40px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    counter-reset: s;
+  }
+  .steps li {
+    padding: 28px 24px;
+    border-radius: var(--radius);
+    background: var(--white);
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+  .n {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 700;
+  }
+  .steps h3 {
+    font-size: var(--step-2);
+  }
+  .steps p {
+    color: var(--muted);
+  }
+  .funders {
+    background: var(--navy);
+  }
+  .funders .section-head {
+    gap: 22px;
+    justify-items: start;
+  }
+  .cof li {
+    padding: 28px;
+    border-radius: var(--radius);
+    background: rgb(8 21 58 / 0.35);
+  }
+  .cof h3 {
+    font-size: var(--step-2);
+  }
+  @media (max-width: 960px) {
+    .split {
+      grid-template-columns: 1fr;
+    }
+    .steps {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import type { Partner } from '../lib/site';
+import { areas, where, summary } from '../lib/site';
+import { img } from '../lib/images';
+
+interface Props { partner: Partner; showSummary?: boolean }
+const { partner: p, showSummary = false } = Astro.props;
+const place = where(p);
+---
+
+<a
+  href={`/partners/${p.slug}/`}
+  class="card"
+  data-areas={p.areas.join(' ')}
+  data-states={(p.panIndia ? ['Pan-India', ...p.states] : p.states).join('|')}
+  data-name={p.name.toLowerCase()}
+>
+  <div class="media">
+    {p.images[0] && <Image src={img(p.images[0])} alt="" widths={[360, 560, 720]} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px" loading="lazy" />}
+    <span class="area">{p.areas.map((a) => areas[a].short).join(' · ')}</span>
+  </div>
+  <div class="body">
+    <h3>{p.name}</h3>
+    {showSummary && summary(p, 130) && <p class="sum">{summary(p, 130)}</p>}
+    <p class="meta">
+      {place && <span>{place}</span>}
+      {p.sinceYear && <span>Since {p.sinceYear}</span>}
+    </p>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 0 1px 0 var(--line);
+    transition: transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s ease;
+    height: 100%;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+  }
+  .media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--paper-2);
+    overflow: hidden;
+  }
+  .media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(.2,.7,.2,1);
+  }
+  .card:hover .media :global(img) {
+    transform: scale(1.04);
+  }
+  .area {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.92);
+    color: var(--navy-900);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .body {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 20px 22px 22px;
+  }
+  h3 {
+    font-size: var(--step-1);
+    line-height: 1.2;
+  }
+  .sum {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    color: var(--muted);
+    font-size: 0.86rem;
+    margin-top: auto;
+  }
+  .meta span + span::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--teal);
+    margin-right: 14px;
+    vertical-align: middle;
+  }
+</style>

@@ -1,0 +1,325 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, people, values, stats } from '../lib/site';
+import { img } from '../lib/images';
+---
+
+<Base
+  title="About us"
+  description="MFE, registered as The RG Manudhane Foundation for Excellence, was set up as the legacy of R.G. Manudhane (1921 to 2012). Meet our trustees and advisors."
+  image={img('site/hero-2.webp')}
+>
+  <PageHero
+    eyebrow="About MFE"
+    title="A legacy of values-based excellence."
+    lead={`The Motivation for Excellence Initiative (MFE), registered as ${site.legalName}, was set up as a legacy to society by the late R.G. Manudhane. Since ${stats.since} we have partnered with ${stats.partners} organisations across India.`}
+    image={img('site/hero-2.webp')}
+    imageAlt="Community members at an MFE-supported programme"
+    crumbs={[{ href: '/about/', label: 'About' }]}
+  />
+
+  <!-- Founder -->
+  <section class="section on-dark founder-sec">
+    <div class="wrap founder">
+      <div class="portraits reveal">
+        <figure>
+          <Image src={img(people.founder.image)} alt={`Portrait of ${people.founder.name}`} width={224} height={298} />
+          <figcaption><strong>{people.founder.name}</strong><span>{people.founder.years} · {people.founder.role}</span></figcaption>
+        </figure>
+        <figure>
+          <Image src={img(people.tribute.image)} alt={`Portrait of ${people.tribute.name}`} width={224} height={298} />
+          <figcaption><strong>{people.tribute.name}</strong><span>{people.tribute.years} · {people.tribute.role}</span></figcaption>
+        </figure>
+      </div>
+      <div class="story reveal">
+        <span class="eyebrow">Our founder</span>
+        <h2>“Who believed in the relentless pursuit of excellence.”</h2>
+        <div class="prose">
+          <p>
+            R.G. Manudhane was a quiet, self-made man, a true “rags to riches” story, whose life exemplified a continuous
+            striving for values-based excellence. MFE is the legacy he chose to leave to society.
+          </p>
+          <p>
+            That idea still shapes how we work. We look for people and organisations who do humble work extraordinarily well,
+            and we back them with grants, guidance and connections.
+          </p>
+          <p>
+            We also remember Shailaja Asave, former Trustee, who was the heart and soul of MFE.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Approach -->
+  <section class="section">
+    <div class="wrap approach">
+      <div class="section-head reveal">
+        <span class="eyebrow">Our approach</span>
+        <h2>Innovative, yet pragmatic.</h2>
+        <p class="lead">
+          We are committed to the wellbeing and development of rural and tribal communities. We partner with organisations,
+          typically NGOs, that implement programmes on the ground, and we collaborate with philanthropists, companies and other
+          not-for-profits towards the same goal.
+        </p>
+      </div>
+      <ul class="pillars">
+        {
+          values.map((v) => (
+            <li class="reveal">
+              <h3>{v.title}</h3>
+              <p>{v.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="section team-sec" id="team">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Trustees</span>
+        <h2>The people behind MFE.</h2>
+      </div>
+      <ul class="people">
+        {
+          people.trustees.map((t) => (
+            <li class="person reveal">
+              <Image src={img(t.image)} alt={`Portrait of ${t.name}`} widths={[240, 400]} sizes="(max-width: 640px) 45vw, 280px" />
+              <div class="who">
+                <h3>{t.name}</h3>
+                <span class="role">{t.role}</span>
+              </div>
+              <details>
+                <summary>Read bio</summary>
+                <p>{t.bio}</p>
+              </details>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="section-head reveal advisors-head">
+        <span class="eyebrow">Advisors</span>
+        <h2>Expertise from the field.</h2>
+      </div>
+      <ul class="people people--advisors">
+        {
+          people.advisors.map((t) => (
+            <li class="person person--row reveal">
+              <Image src={img(t.image)} alt={`Portrait of ${t.name}`} widths={[200, 320]} sizes="160px" />
+              <div>
+                <div class="who">
+                  <h3>{t.name}</h3>
+                  <span class="role">{t.role}</span>
+                </div>
+                <p>{t.bio}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .founder-sec {
+    background: var(--navy-900);
+  }
+  .founder {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+  }
+  .portraits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .portraits figure {
+    margin: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .portraits figure:nth-child(2) {
+    margin-top: 48px;
+  }
+  .portraits :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius);
+    filter: grayscale(0.15);
+  }
+  .portraits figcaption {
+    display: grid;
+    font-size: var(--step--1);
+    color: #b9c4e4;
+  }
+  .portraits strong {
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 500;
+  }
+  .story {
+    display: grid;
+    gap: 24px;
+  }
+  .story h2 {
+    font-size: var(--step-4);
+    color: var(--white);
+    font-style: italic;
+    font-weight: 350;
+  }
+
+  .pillars {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+  .pillars li {
+    padding: 28px 22px;
+    border-radius: var(--radius);
+    background: var(--white);
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    border-top: 4px solid var(--teal);
+  }
+  .pillars h3 {
+    font-size: var(--step-2);
+    color: var(--navy);
+  }
+  .pillars p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .team-sec {
+    background: var(--white);
+  }
+  .people {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 24px;
+  }
+  .person {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+  .person :global(img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+    background: var(--paper-2);
+  }
+  .who h3 {
+    font-size: var(--step-2);
+  }
+  .role {
+    color: var(--teal-ink);
+    font-weight: 600;
+    font-size: var(--step--1);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  details {
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--navy);
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: '+';
+    font-size: 1.3rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+  details[open] summary::after {
+    transform: rotate(45deg);
+  }
+  details p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    padding-top: 6px;
+  }
+  .advisors-head {
+    margin-top: clamp(64px, 8vw, 112px);
+  }
+  .people--advisors {
+    grid-template-columns: 1fr 1fr;
+  }
+  .person--row {
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+  }
+  .person--row p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 1100px) {
+    .pillars {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .pillars li:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 900px) {
+    .founder {
+      grid-template-columns: 1fr;
+    }
+    .people {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .people--advisors {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .pillars {
+      grid-template-columns: 1fr;
+    }
+    .people {
+      gap: 28px 14px;
+    }
+    .who h3 {
+      font-size: var(--step-1);
+    }
+    .person--row {
+      grid-template-columns: 96px 1fr;
+      gap: 16px;
+    }
+  }
+</style>

@@ -1,0 +1,244 @@
+---
+import { Image } from 'astro:assets';
+import { nav } from '../lib/site';
+import { img } from '../lib/images';
+
+interface Props {
+  tone?: 'light' | 'dark';
+}
+const { tone = 'light' } = Astro.props;
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+
+<header class="site-header" data-tone={tone}>
+  <div class="wrap bar">
+    <a href="/" class="brand" aria-label="Motivation for Excellence, home">
+      <Image src={img('brand/logo-navy.png')} alt="" class="logo logo--navy" width={196} densities={[1, 2]} loading="eager" />
+      <Image src={img('brand/logo-white.png')} alt="" class="logo logo--white" width={196} densities={[1, 2]} loading="eager" />
+    </a>
+
+    <button class="menu-btn" aria-expanded="false" aria-controls="site-nav">
+      <span class="sr-only">Menu</span>
+      <span class="bars" aria-hidden="true"></span>
+    </button>
+
+    <nav id="site-nav" class="nav" aria-label="Main">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/work-with-us/" class="btn btn--teal nav-cta">Partner with us</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  btn?.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    header?.classList.toggle('is-open', !open);
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && header?.classList.contains('is-open')) btn?.click();
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    background: rgb(247 245 240 / 0.86);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .site-header.is-scrolled {
+    border-color: var(--line);
+  }
+  .site-header[data-tone='dark'] {
+    position: fixed;
+    inset: 0 0 auto 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: var(--white);
+  }
+  .site-header[data-tone='dark'].is-scrolled,
+  .site-header[data-tone='dark'].is-open {
+    background: rgb(8 21 58 / 0.88);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-color: rgb(255 255 255 / 0.08);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .brand {
+    display: block;
+    flex-shrink: 0;
+  }
+  .logo {
+    width: 196px;
+    height: auto;
+  }
+  .logo--white,
+  [data-tone='dark'] .logo--navy {
+    display: none;
+  }
+  [data-tone='dark'] .logo--white {
+    display: block;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav ul {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav ul a {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 520;
+    font-size: 0.97rem;
+    transition: background 0.2s ease;
+  }
+  .nav ul a:hover {
+    background: rgb(28 60 140 / 0.08);
+  }
+  [data-tone='dark'] .nav ul a:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+  .nav ul a[aria-current='page'] {
+    background: var(--navy);
+    color: var(--white);
+  }
+  [data-tone='dark'] .nav ul a[aria-current='page'] {
+    background: var(--white);
+    color: var(--navy-950);
+  }
+  .nav-cta {
+    padding: 11px 20px;
+    min-height: 44px;
+  }
+  .menu-btn {
+    display: none;
+  }
+
+  @media (max-width: 1020px) {
+    .menu-btn {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 999px;
+      background: rgb(28 60 140 / 0.08);
+      color: inherit;
+      cursor: pointer;
+    }
+    [data-tone='dark'] .menu-btn {
+      background: rgb(255 255 255 / 0.12);
+    }
+    .bars,
+    .bars::before,
+    .bars::after {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+      position: relative;
+    }
+    .bars::before,
+    .bars::after {
+      content: '';
+      position: absolute;
+      left: 0;
+    }
+    .bars::before {
+      top: -6px;
+    }
+    .bars::after {
+      top: 6px;
+    }
+    .is-open .bars {
+      background: transparent;
+    }
+    .is-open .bars::before {
+      transform: translateY(6px) rotate(45deg);
+    }
+    .is-open .bars::after {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+    .nav {
+      position: fixed;
+      inset: var(--header-h) 0 0 0;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 24px;
+      padding: 24px var(--gutter) 40px;
+      background: var(--paper);
+      color: var(--ink);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      overflow-y: auto;
+    }
+    .is-open .nav {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+    .nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+    .nav ul a {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      padding: 12px 0;
+      border-radius: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav ul a[aria-current='page'],
+    [data-tone='dark'] .nav ul a[aria-current='page'] {
+      background: none;
+      color: var(--navy);
+    }
+    .nav-cta {
+      justify-content: center;
+    }
+  }
+</style>

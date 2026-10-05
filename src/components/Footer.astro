@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import { site, nav, areas, areaOrder } from '../lib/site';
+import { img } from '../lib/images';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer on-dark">
+  <div class="stripe-band stripes" aria-hidden="true"></div>
+  <div class="wrap grid">
+    <div class="about">
+      <Image src={img('brand/logo-white.png')} alt="Motivation for Excellence" width={200} />
+      <p>
+        Registered as {site.legalName}. Set up as a legacy to society by the late R.G. Manudhane (1921 to 2012).
+      </p>
+    </div>
+
+    <div>
+      <h2 class="h">Explore</h2>
+      <ul>
+        <li><a href="/">Home</a></li>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="h">What we fund</h2>
+      <ul>
+        {areaOrder.map((a) => <li><a href={`/what-we-fund/${a}/`}>{areas[a].title}</a></li>)}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="h">Visit or write</h2>
+      <address>
+        {site.address.map((l) => <span>{l}</span>)}
+      </address>
+      <a class="mail" href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </div>
+
+  <div class="wrap legal">
+    <span>© {year} {site.name}</span>
+    <a href="/privacy/">Privacy</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--navy-950);
+    padding-bottom: 32px;
+  }
+  .stripe-band {
+    height: 14px;
+    opacity: 0.9;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+    gap: 40px;
+    padding-block: 72px 56px;
+  }
+  .about {
+    display: grid;
+    gap: 20px;
+    align-content: start;
+  }
+  .about p {
+    color: #aab6d9;
+    font-size: var(--step--1);
+    max-width: 34ch;
+  }
+  .h {
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--teal-300);
+    margin-bottom: 16px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+  }
+  ul a,
+  .legal a {
+    color: #e3e9f8;
+    text-decoration: none;
+    display: inline-block;
+    padding: 6px 0;
+  }
+  ul a:hover,
+  .legal a:hover,
+  .mail:hover {
+    color: var(--teal-300);
+  }
+  address {
+    font-style: normal;
+    display: grid;
+    color: #cfd8f0;
+    margin-bottom: 14px;
+  }
+  .mail {
+    color: var(--white);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--teal);
+    word-break: break-all;
+  }
+  .legal {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+    color: #9aa7cf;
+    font-size: var(--step--1);
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .about {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 520px) {
+    .grid {
+      grid-template-columns: 1fr;
+      padding-block: 56px 40px;
+    }
+  }
+</style>

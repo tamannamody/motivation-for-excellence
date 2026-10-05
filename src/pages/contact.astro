@@ -1,0 +1,226 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Arrow from '../components/Arrow.astro';
+import { site } from '../lib/site';
+---
+
+<Base
+  title="Contact"
+  description="Contact Motivation for Excellence (MFE) at 1201 Kritika Tower, Chembur, Mumbai, or write to info@motivationforexcellence.org."
+>
+  <PageHero
+    eyebrow="Contact"
+    title="We would like to hear from you."
+    lead="Whether you run a programme, want to co-fund one, or have a question about our work, write to us and the team will get back to you."
+    crumbs={[{ href: '/contact/', label: 'Contact' }]}
+  />
+
+  <section class="section--tight">
+    <div class="wrap grid">
+      <form class="form" data-form novalidate>
+        <div class="row">
+          <label>
+            <span>Your name</span>
+            <input name="name" autocomplete="name" required />
+          </label>
+          <label>
+            <span>Your email</span>
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+        </div>
+        <label>
+          <span>Organisation <em>(optional)</em></span>
+          <input name="org" autocomplete="organization" />
+        </label>
+        <fieldset>
+          <legend>I am writing about</legend>
+          <div class="pills">
+            <label><input type="radio" name="topic" value="Partnership enquiry" checked /> <span>A partnership</span></label>
+            <label><input type="radio" name="topic" value="Co-funding enquiry" /> <span>Co-funding</span></label>
+            <label><input type="radio" name="topic" value="General question" /> <span>Something else</span></label>
+          </div>
+        </fieldset>
+        <label>
+          <span>Message</span>
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+        <p class="error" role="alert" hidden data-error>Please add your name, a valid email and a message.</p>
+        <button class="btn" type="submit">Send message <Arrow /></button>
+        <p class="note">This opens your email app with the message ready to send. We use your details only to reply. See our <a href="/privacy/">privacy notice</a>.</p>
+      </form>
+
+      <aside class="info">
+        <div class="card">
+          <h2>Email</h2>
+          <a class="big" href={`mailto:${site.email}`}>{site.email}</a>
+        </div>
+        <div class="card">
+          <h2>Office</h2>
+          <address>{site.address.map((l) => <span>{l}</span>)}</address>
+          <a class="link-arrow" href={site.mapUrl} rel="noopener" target="_blank">Open in Google Maps <Arrow size={16} /></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]')!;
+  const err = form.querySelector<HTMLElement>('[data-error]')!;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const email = String(d.get('email') || '');
+    if (!d.get('name') || !/^\S+@\S+\.\S+$/.test(email) || !d.get('message')) {
+      err.hidden = false;
+      return;
+    }
+    err.hidden = true;
+    const body = `${d.get('message')}\n\n${d.get('name')}\n${email}${d.get('org') ? `\n${d.get('org')}` : ''}`;
+    location.href = `mailto:info@motivationforexcellence.org?subject=${encodeURIComponent(String(d.get('topic')))}&body=${encodeURIComponent(body)}`;
+  });
+</script>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  .form {
+    display: grid;
+    gap: 20px;
+    padding: clamp(24px, 4vw, 44px);
+    border-radius: var(--radius);
+    background: var(--white);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  label > span,
+  legend {
+    display: block;
+    font-weight: 600;
+    font-size: 0.93rem;
+    margin-bottom: 8px;
+  }
+  label em {
+    font-style: normal;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  input:not([type='radio']),
+  textarea {
+    width: 100%;
+    font: inherit;
+    padding: 14px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    color: var(--ink);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--navy);
+    background: var(--white);
+  }
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pills label {
+    position: relative;
+  }
+  .pills input {
+    position: absolute;
+    opacity: 0;
+  }
+  .pills span {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    font-weight: 550;
+    cursor: pointer;
+    margin: 0;
+  }
+  .pills input:checked + span {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .pills input:focus-visible + span {
+    outline: 3px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .btn {
+    justify-self: start;
+    cursor: pointer;
+  }
+  .error {
+    color: #b42318;
+    font-weight: 550;
+  }
+  .note {
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .info {
+    display: grid;
+    gap: 16px;
+  }
+  .card {
+    padding: 28px;
+    border-radius: var(--radius);
+    background: var(--navy);
+    color: var(--white);
+    display: grid;
+    gap: 12px;
+  }
+  .card + .card {
+    background: var(--white);
+    color: var(--ink);
+  }
+  .card h2 {
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--teal-300);
+  }
+  .card + .card h2 {
+    color: var(--teal-ink);
+  }
+  .big {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--white);
+    word-break: break-word;
+    text-decoration-color: var(--teal);
+    text-underline-offset: 6px;
+  }
+  address {
+    font-style: normal;
+    display: grid;
+    font-size: var(--step-1);
+  }
+  @media (max-width: 900px) {
+    .grid,
+    .row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

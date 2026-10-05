@@ -1,0 +1,672 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, areas, areaOrder, values, stats, partners, partnersIn, people, bySlug } from '../lib/site';
+import { img } from '../lib/images';
+
+const stories = [
+  {
+    slug: 'karuna-trust',
+    kicker: 'Healthcare · Assam',
+    title: 'A floating clinic on the Brahmaputra',
+    body: 'A boat clinic brings dental, eye and ultrasound care to tribal and riverine villages in Biswanath and Lakhimpur, with a goal of cutting infant mortality by at least 10% in a year.',
+  },
+  {
+    slug: 'dr-apj-kalam-library-mgims',
+    kicker: 'Healthcare · Wardha',
+    title: 'A heritage library, rebuilt for the next generation of rural doctors',
+    body: 'The Dr APJ Kalam Library at MGIMS Sewagram grew from 2,700 to 16,000 square feet, keeping the heritage structure intact.',
+  },
+  {
+    slug: 'bridges-of-sports',
+    kicker: 'Nurturing Excellence · Karnataka',
+    title: 'India’s fastest sprinters, from the back of beyond',
+    body: 'Bridges of Sports finds and trains young sprinters from Siddi and other tribal communities in Uttara Kannada, with its sights on the 2028 Olympics.',
+  },
+];
+const featured = stories.map((s) => ({ ...s, p: bySlug(s.slug)! }));
+const marquee = partners.map((p) => p.name);
+---
+
+<Base title={site.name} description={site.description} headerTone="dark">
+  <!-- Hero -->
+  <section class="hero on-dark">
+    <Image
+      src={img('site/hero-circle.webp')}
+      alt="Villagers standing in a wide circle at a community meeting in the hills"
+      class="hero-img"
+      widths={[640, 1024, 1600]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow">Motivation for Excellence · since {stats.since}</span>
+      <h1>Backing excellence, <em>however humble the work.</em></h1>
+      <p class="lead">
+        We partner with NGOs bringing healthcare, education and livelihoods to India’s rural and tribal communities, and help
+        their best ideas grow.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn--teal" href="/partners/">Meet our {stats.partners} partners <Arrow /></a>
+        <a class="btn btn--ghost-light" href="/about/">Our story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Numbers -->
+  <section class="stats-wrap">
+    <div class="wrap">
+      <dl class="stats">
+        <div><dt>Partner organisations</dt><dd>{stats.partners}</dd></div>
+        <div><dt>Areas of work</dt><dd>{stats.areas}</dd></div>
+        <div><dt>States, plus pan-India work</dt><dd>{stats.states}</dd></div>
+        <div><dt>Partnering since</dt><dd>{stats.since}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="section">
+    <div class="wrap mission">
+      <div class="reveal">
+        <span class="eyebrow">Our mission</span>
+        <p class="statement">
+          To nurture <mark>values-based excellence</mark> and a passion for helping catalyse improvements in society.
+        </p>
+      </div>
+      <div class="mission-side reveal">
+        <p class="lead">
+          We focus on solutions that are innovative, yet pragmatic and effective. Most of our work happens through partners:
+          NGOs who know their communities, and whom we support with grants, guidance and connections.
+        </p>
+        <figure class="founder">
+          <Image src={img(people.founder.image)} alt={`Portrait of ${people.founder.name}`} width={96} height={128} />
+          <figcaption>
+            <strong>{people.founder.name}</strong>
+            <span>{people.founder.years}</span>
+            <span>MFE is his legacy to society: a self-made life, lived in pursuit of values-based excellence.</span>
+            <a class="link-arrow" href="/about/">Read our story <Arrow size={16} /></a>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Areas -->
+  <section class="section areas-sec">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">What we fund</span>
+        <h2>Four areas, one standard.</h2>
+        <p class="lead">We go deep in a few areas where steady, patient funding changes what is possible for rural and tribal families.</p>
+      </div>
+      <div class="bento">
+        {
+          areaOrder.map((slug, i) => {
+            const a = areas[slug];
+            return (
+              <a href={`/what-we-fund/${slug}/`} class={`tile tile-${i + 1} reveal`}>
+                <Image src={img(a.image)} alt="" widths={[480, 800, 1100]} sizes="(max-width: 760px) 100vw, 50vw" loading="lazy" />
+                <div class="tile-shade" aria-hidden="true" />
+                <div class="tile-body">
+                  <span class="count">{partnersIn(slug).length} partners</span>
+                  <h3>{a.title}</h3>
+                  <p>{a.tagline}</p>
+                  <span class="go" aria-hidden="true"><Arrow size={20} /></span>
+                </div>
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="section on-dark values-sec">
+    <div class="wrap values-grid">
+      <div class="section-head reveal">
+        <span class="eyebrow">How we choose partners</span>
+        <h2>Five things we look for.</h2>
+        <p class="lead">Every programme we support shares these characteristics. They are also how we hold ourselves to account.</p>
+      </div>
+      <ol class="values">
+        {
+          values.map((v, i) => (
+            <li class="reveal">
+              <span class="num">0{i + 1}</span>
+              <div>
+                <h3>{v.title}</h3>
+                <p>{v.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Stories -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">From the field</span>
+        <h2>What partnership looks like.</h2>
+      </div>
+      <div class="stories">
+        {
+          featured.map((s, i) => (
+            <a href={`/partners/${s.slug}/`} class="story reveal">
+              <div class="story-media">
+                <Image src={img(s.p.images[0])} alt="" widths={[480, 800, 1200]} sizes="(max-width: 960px) 100vw, 33vw" loading="lazy" />
+              </div>
+              <div class="story-body">
+                <span class="kicker">{s.kicker}</span>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
+                <span class="link-arrow">{s.p.name} <Arrow size={16} /></span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Partner marquee -->
+  <section class="section--tight marquee-sec" aria-labelledby="partners-h">
+    <div class="wrap marquee-head">
+      <h2 id="partners-h">In good company</h2>
+      <a class="link-arrow" href="/partners/">See all {stats.partners} partners <Arrow size={16} /></a>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="track">
+        {marquee.map((n) => <span>{n}</span>)}
+        {marquee.map((n) => <span class="dup">{n}</span>)}
+      </div>
+    </div>
+    <p class="sr-only">Partners include {marquee.join(', ')}.</p>
+  </section>
+
+  <!-- Quote -->
+  <section class="section quote-sec">
+    <figure class="narrow quote reveal">
+      <div class="q-mark stripes" aria-hidden="true"></div>
+      <blockquote>
+        We must learn to honor excellence in every socially accepted human activity, however humble the activity, and to
+        scorn shoddiness, however exalted the activity.
+      </blockquote>
+      <figcaption>John W. Gardner · author and leader</figcaption>
+    </figure>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    min-height: min(100svh, 920px);
+    display: grid;
+    align-content: end;
+    padding-top: calc(var(--header-h) + 40px);
+    padding-bottom: 28px;
+    overflow: hidden;
+    background: var(--navy-950);
+  }
+  .hero :global(.hero-img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+  }
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(8 21 58 / 0.55) 0%, rgb(8 21 58 / 0.15) 30%, rgb(8 21 58 / 0.7) 62%, rgb(8 21 58 / 0.96) 100%),
+      linear-gradient(90deg, rgb(8 21 58 / 0.6) 0%, transparent 70%);
+  }
+  .hero-inner {
+    position: relative;
+    display: grid;
+    gap: 24px;
+    padding-bottom: clamp(32px, 6vw, 72px);
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 1.6rem + 6vw, 7.2rem);
+    color: var(--white);
+    max-width: 14ch;
+    line-height: 0.98;
+    font-weight: 400;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--teal-300);
+    font-weight: 350;
+  }
+  .hero .lead {
+    max-width: 56ch;
+    color: #dde5f7;
+  }
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .caption {
+    position: relative;
+    font-size: 0.78rem;
+    color: #9fb0db;
+    letter-spacing: 0.02em;
+  }
+
+  /* Stats */
+  .stats-wrap {
+    background: var(--navy-950);
+    padding-bottom: 0;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0;
+    background: var(--white);
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+  }
+  .stats div {
+    padding: clamp(22px, 3vw, 36px);
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 6px;
+    border-right: 1px solid var(--line);
+  }
+  .stats div:last-child {
+    border-right: 0;
+  }
+  .stats dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1;
+    color: var(--navy);
+    font-variant-numeric: lining-nums;
+  }
+  .stats dt {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  /* Mission */
+  .mission {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .statement {
+    margin-top: 20px;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  .statement mark {
+    background: linear-gradient(transparent 62%, rgb(66 192 182 / 0.45) 62%);
+    color: inherit;
+  }
+  .mission-side {
+    display: grid;
+    gap: 32px;
+    padding-top: 12px;
+  }
+  .founder {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 20px;
+    margin: 0;
+    padding: 20px;
+    background: var(--white);
+    border-radius: var(--radius);
+  }
+  .founder :global(img) {
+    border-radius: 12px;
+    object-fit: cover;
+    width: 96px;
+    height: 128px;
+    filter: grayscale(0.2);
+  }
+  .founder figcaption {
+    display: grid;
+    gap: 4px;
+    align-content: start;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+  .founder strong {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .founder .link-arrow {
+    margin-top: 8px;
+  }
+
+  /* Areas bento */
+  .areas-sec {
+    padding-top: 0;
+  }
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: clamp(220px, 24vw, 320px);
+    gap: 16px;
+  }
+  .tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+    color: var(--white);
+    text-decoration: none;
+    background: var(--navy);
+  }
+  .tile-1 { grid-column: span 7; grid-row: span 2; }
+  .tile-2 { grid-column: span 5; }
+  .tile-3 { grid-column: span 5; }
+  .tile-4 { grid-column: span 12; }
+  .tile :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(.2,.7,.2,1);
+  }
+  .tile:hover :global(img) {
+    transform: scale(1.05);
+  }
+  .tile-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgb(8 21 58 / 0.88) 100%);
+  }
+  .tile-body {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: clamp(20px, 3vw, 32px);
+    display: grid;
+    gap: 6px;
+  }
+  .tile h3 {
+    font-size: var(--step-3);
+  }
+  .tile p {
+    color: #d9e2f6;
+    max-width: 40ch;
+  }
+  .count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal-300);
+  }
+  .go {
+    position: absolute;
+    right: clamp(20px, 3vw, 32px);
+    bottom: clamp(20px, 3vw, 32px);
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--teal);
+    color: var(--navy-950);
+    transition: transform 0.3s ease;
+  }
+  .tile:hover .go {
+    transform: rotate(-45deg);
+  }
+
+  /* Values */
+  .values-sec {
+    background: var(--navy-900);
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .values-grid .section-head {
+    position: sticky;
+    top: calc(var(--header-h) + 32px);
+  }
+  .values-grid .section-head h2 {
+    color: var(--white);
+  }
+  .values {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .values li {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 16px;
+    padding: 28px 0;
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+  }
+  .values li:last-child {
+    border-bottom: 1px solid rgb(255 255 255 / 0.14);
+  }
+  .num {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--teal-300);
+  }
+  .values h3 {
+    font-size: var(--step-3);
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .values p {
+    color: #c3cde9;
+  }
+
+  /* Stories */
+  .stories {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .story {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--ink);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .story:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-3px);
+  }
+  .story-media {
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--paper-2);
+  }
+  .story-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(.2,.7,.2,1);
+  }
+  .story:hover .story-media :global(img) {
+    transform: scale(1.04);
+  }
+  .story-body {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    padding: clamp(20px, 3vw, 32px);
+  }
+  .kicker {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal-ink);
+  }
+  .story h3 {
+    font-size: var(--step-2);
+  }
+  .story .link-arrow {
+    margin-top: auto;
+  }
+  .story p {
+    color: var(--muted);
+  }
+
+  /* Marquee */
+  .marquee-sec {
+    background: var(--white);
+    border-block: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .marquee-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .marquee-head h2 {
+    font-size: var(--step-2);
+  }
+  .marquee {
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .track {
+    display: flex;
+    gap: 48px;
+    width: max-content;
+    animation: scroll 120s linear infinite;
+  }
+  .marquee:hover .track {
+    animation-play-state: paused;
+  }
+  .track span {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--navy);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 48px;
+  }
+  .track span::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: var(--teal);
+    transform: rotate(45deg);
+  }
+  @keyframes scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .track {
+      animation: none;
+      flex-wrap: wrap;
+      width: auto;
+      padding-inline: var(--gutter);
+      gap: 12px 32px;
+    }
+    .dup {
+      display: none !important;
+    }
+  }
+
+  /* Quote */
+  .quote {
+    position: relative;
+    margin-block: 0;
+    text-align: center;
+    display: grid;
+    gap: 28px;
+    justify-items: center;
+  }
+  .q-mark {
+    width: 64px;
+    height: 32px;
+    border-radius: 6px;
+  }
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.2;
+    font-style: italic;
+    font-weight: 350;
+    color: var(--navy-900);
+  }
+  .quote figcaption {
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  @media (max-width: 960px) {
+    .mission,
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+    .values-grid .section-head {
+      position: static;
+    }
+    .stories {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 760px) {
+    .stats {
+      grid-template-columns: 1fr 1fr;
+    }
+    .stats div:nth-child(2) {
+      border-right: 0;
+    }
+    .stats div:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--line);
+    }
+    .bento {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 280px;
+    }
+    .tile-1,
+    .tile-2,
+    .tile-3,
+    .tile-4 {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+</style>
