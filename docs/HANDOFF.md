@@ -53,6 +53,19 @@ noted below.
   linked to six partner photos, hidden under 1100px.
 - **Work with us**: caption "Palavee early childhood training, Amravati"
   (place read from the banner in the photo, Tivsa, Amravati district).
+- **Contact**: hero illustration, a navy envelope with a rising letter on a
+  teal circle, with the form's three topics as floating labels. The email
+  address in the navy card now shrinks and wraps instead of being cut off.
+- **About**: the hero photo is replaced by a legacy timeline: founder
+  portrait and name card (1921 to 2012), a dotted path to "2013 MFE begins as
+  his legacy" and "Today 51 partners in 8 states", all from site data. The
+  founder portrait also appears in the founder section below; swap the
+  timeline's start if that feels repetitive.
+
+Pattern for these hero graphics (Partners, Contact, About): the page wraps
+PageHero in a `div.bgfx bgfx--teal`, narrows `.text` with `:global`, and
+places an absolutely positioned, `aria-hidden` graphic on the right that is
+hidden under 1100px.
 
 ## Publishing
 
