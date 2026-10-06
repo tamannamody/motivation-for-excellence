@@ -15,7 +15,7 @@ npm run build     # static site in dist/
 npm run preview   # serve dist/
 ```
 
-**Live preview:** https://tamannamody.github.io/motivation-for-excellence/ deploys from `main` through GitHub Actions (`.github/workflows/deploy.yml`). The preview is marked `noindex`, so search engines leave it alone. A production build (no `BASE_PATH`) targets the real domain.
+**Live preview:** https://tamannamody.github.io/motivation-for-excellence/ is published by `sh scripts/deploy-pages.sh`, which builds with the `/motivation-for-excellence` base path and pushes `dist/` to the `gh-pages` branch. The preview is marked `noindex`, so search engines leave it alone. A production build (no `BASE_PATH`) targets the real domain.
 
 ## Where things live
 

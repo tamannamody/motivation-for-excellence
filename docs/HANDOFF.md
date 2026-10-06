@@ -54,18 +54,35 @@ noted below.
 - **Work with us**: caption "Palavee early childhood training, Amravati"
   (place read from the banner in the photo, Tivsa, Amravati district).
 
+## Publishing
+
+- **Live preview:** https://tamannamody.github.io/motivation-for-excellence/
+  (public repo since 6 October 2026, marked `noindex`).
+- **To publish changes:** commit and push `main`, then run
+  `sh scripts/deploy-pages.sh`. It builds with the base path and force-pushes
+  `dist/` to the `gh-pages` branch, which Pages serves.
+- **All internal links go through `link()`** in `src/lib/url.ts` so they work
+  under `/motivation-for-excellence/`. Use `link('/path/')` for every new
+  root-relative href, src or CSS background (backgrounds via a `--img` custom
+  property set inline, see the mission card on the homepage).
+- **Automatic deploys** are possible with `docs/deploy/github-actions-deploy.yml`:
+  move it to `.github/workflows/deploy.yml`, switch Pages to "GitHub Actions",
+  and push. The push needs a GitHub token with the `workflow` scope:
+  `gh auth refresh -h github.com -s workflow`.
+
+## The audit is private
+
+The audit of the old site describes security gaps on the live WordPress site
+(public admin usernames, open xmlrpc.php, no security headers). It lives in
+the private repo `tamannamody/motivation-for-excellence-audit`
+(`~/motivation-for-excellence-audit`) and was scrubbed from this repo's
+history on 6 October 2026 before it went public. Never add it back here.
+
 ## Open
 
-- **Publishing.** Repo made public on 6 October 2026. GitHub Pages needs a public repo or a paid
-  plan; `tamannamody.github.io/motivation-for-excellence/` returns 404 today.
-  Options: make it public, use GitHub Pro, or host on Netlify or Cloudflare
-  Pages (`public/_redirects` is already in their format).
-- **Base-path work in a git stash** ("base-path work before pulling homepage
-  redesign"): a `link()` helper, `SITE_URL` and `BASE_PATH` config and a
-  Pages deploy workflow, needed only to serve the site under a sub-path such
-  as github.io/motivation-for-excellence/. Discarded from the working tree on
-  request; still recoverable with `git stash list`. Drop it if Pages is not
-  the route.
 - **Captions** for the About and area page photos, once someone says what
   each shows.
+- **Real domain:** when MFE is ready, deploy a production build (no
+  `BASE_PATH`) to Netlify or Cloudflare Pages; `public/_redirects` is already
+  in their format.
 - Content gaps: see `docs/content-gaps.md`.
