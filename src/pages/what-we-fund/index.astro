@@ -4,8 +4,25 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Arrow from '../../components/Arrow.astro';
-import { areas, areaOrder, partnersIn, stats } from '../../lib/site';
+import { areas, areaOrder, partnersIn, stats, values, bySlug, where } from '../../lib/site';
 import { img } from '../../lib/images';
+
+const chapters = areaOrder.map((slug, i) => {
+  const a = areas[slug];
+  const ps = partnersIn(slug);
+  const highlights = a.highlights.map((s) => bySlug(s)).filter((p) => !!p);
+  const rest = ps.filter((p) => !a.highlights.includes(p.slug));
+  const years = ps.map((p) => p.sinceYear).filter((y): y is number => !!y);
+  return {
+    slug,
+    a,
+    num: String(i + 1).padStart(2, '0'),
+    count: ps.length,
+    since: years.length ? Math.min(...years) : null,
+    highlights,
+    rest,
+  };
+});
 ---
 
 <Base
@@ -13,43 +30,111 @@ import { img } from '../../lib/images';
   description="MFE funds healthcare, education and training, livelihood enhancement and nurturing excellence, through NGO partners working with rural and tribal communities in India."
   image={img('site/education.webp')}
 >
-  <PageHero
-    eyebrow="What we fund"
-    title="Four areas where patient funding changes lives."
-    lead={`We work through ${stats.partners} partner organisations in ${stats.states} states and across India. Each area has its own focus, and the same five tests apply to all of them.`}
-    crumbs={[{ href: '/what-we-fund/', label: 'What we fund' }]}
-  />
+  <div class="bgfx bgfx--teal bgfx--ring">
+    <PageHero
+      eyebrow="What we fund"
+      title="Four areas where patient funding changes lives."
+      lead="We go deep rather than wide. Every grant goes to a partner already proven on the ground, and the same five tests apply in every area."
+      crumbs={[{ href: '/what-we-fund/', label: 'What we fund' }]}
+    >
+      <dl class="proof">
+        <div><dt>Partner organisations</dt><dd>{stats.partners}</dd></div>
+        <div><dt>States, plus pan-India work</dt><dd>{stats.states}</dd></div>
+        <div><dt>Funding partners since</dt><dd>{stats.since}</dd></div>
+      </dl>
+    </PageHero>
+  </div>
 
-  <section class="section--tight">
-    <div class="wrap list">
+  <nav class="jump" aria-label="Areas on this page">
+    <div class="wrap jump-inner">
       {
-        areaOrder.map((slug, i) => {
-          const a = areas[slug];
-          const ps = partnersIn(slug);
-          return (
-            <article class:list={['row reveal', { flip: i % 2 === 1 }]}>
-              <a href={`/what-we-fund/${slug}/`} class="pic" tabindex="-1" aria-hidden="true">
-                <Image src={img(a.image)} alt="" widths={[480, 800, 1100]} sizes="(max-width: 900px) 100vw, 55vw" />
-              </a>
-              <div class="copy">
-                <span class="eyebrow">{String(i + 1).padStart(2, '0')} · {ps.length} partners</span>
-                <h2>
-                  <a href={`/what-we-fund/${slug}/`}>{a.title}</a>
-                </h2>
-                <p class="tag">{a.tagline}</p>
-                <p class="intro">{a.intro}</p>
-                <ul class="names">
-                  {ps.slice(0, 6).map((p) => <li class="chip">{p.name}</li>)}
-                  {ps.length > 6 && <li class="chip more">+{ps.length - 6} more</li>}
-                </ul>
-                <a class="btn" href={`/what-we-fund/${slug}/`}>
-                  Explore {a.short.toLowerCase()} <Arrow />
-                </a>
-              </div>
-            </article>
-          );
-        })
+        chapters.map((c) => (
+          <a href={`#${c.slug}`}>
+            <span class="jn">{c.num}</span>
+            {c.a.short}
+            <span class="jc">{c.count}</span>
+          </a>
+        ))
       }
+    </div>
+  </nav>
+
+  {
+    chapters.map((c, i) => (
+      <section id={c.slug} class:list={['chapter', { 'chapter--alt bgfx bgfx--navy': i % 2 === 1 }]}>
+        <div class:list={['wrap row', { flip: i % 2 === 1 }]}>
+          <figure class="pic reveal">
+            <a href={`/what-we-fund/${c.slug}/`} tabindex="-1" aria-hidden="true" class="frame">
+              <Image src={img(c.a.image)} alt="" widths={[480, 800, 1100]} sizes="(max-width: 900px) 100vw, 55vw" />
+            </a>
+            <figcaption class="badge">
+              <strong>{c.count}</strong>
+              <span>
+                partners{c.since && <><br />since {c.since}</>}
+              </span>
+            </figcaption>
+          </figure>
+
+          <div class="copy reveal">
+            <span class="big-num" aria-hidden="true">{c.num}</span>
+            <span class="eyebrow">Area {c.num}</span>
+            <h2>
+              <a href={`/what-we-fund/${c.slug}/`}>{c.a.title}</a>
+            </h2>
+            <p class="tag">{c.a.tagline}</p>
+            <p class="intro">{c.a.intro}</p>
+
+            <div class="backed">
+              <span class="backed-h">Partners we back</span>
+              <ul>
+                {c.highlights.map((p) => (
+                  <li>
+                    <a href={`/partners/${p.slug}/`} class="pcard">
+                      <Image src={img(p.images[0])} alt="" widths={[120, 240]} sizes="64px" loading="lazy" />
+                      <span class="pmeta">
+                        <strong>{p.name}</strong>
+                        <span>{[where(p), p.projectTitle].filter(Boolean).join(' · ')}</span>
+                      </span>
+                      <span class="parrow" aria-hidden="true"><Arrow size={16} /></span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {c.rest.length > 0 && (
+                <p class="also">
+                  Also: {c.rest.slice(0, 4).map((p) => p.name).join(', ')}
+                  {c.rest.length > 4 && <> and {c.rest.length - 4} more</>}
+                </p>
+              )}
+            </div>
+
+            <a class="btn" href={`/what-we-fund/${c.slug}/`}>
+              Explore {c.a.short.toLowerCase()} <Arrow />
+            </a>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section on-dark tests">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">How we decide</span>
+        <h2>Every grant passes the same five tests.</h2>
+        <p class="lead">Whatever the area, a partner earns our support the same way.</p>
+      </div>
+      <ol class="tests-list">
+        {
+          values.map((v, i) => (
+            <li class="reveal">
+              <span class="tn">{String(i + 1).padStart(2, '0')}</span>
+              <strong>{v.title}</strong>
+              <p>{v.body}</p>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </section>
 
@@ -57,44 +142,174 @@ import { img } from '../../lib/images';
 </Base>
 
 <style>
-  .list {
-    display: grid;
-    gap: clamp(48px, 8vw, 112px);
+  /* Proof numbers in the hero */
+  .proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(16px, 3vw, 40px);
+    margin: 8px 0 0;
+  }
+  .proof div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+    padding-left: 16px;
+    border-left: 3px solid var(--teal);
+  }
+  .proof dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1;
+    color: var(--navy);
+  }
+  .proof dt {
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
+  /* Sticky jump bar */
+  .jump {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 20;
+    background: rgb(247 245 240 / 0.86);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-block: 1px solid var(--line);
+  }
+  .jump-inner {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-block: 12px;
+    scrollbar-width: none;
+  }
+  .jump a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex: none;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--white);
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  .jump a:hover {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .jn {
+    font-family: var(--font-display);
+    color: var(--teal-ink);
+  }
+  .jump a:hover .jn { color: var(--teal-300); }
+  .jc {
+    font-size: 0.78rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--teal-50);
+    color: var(--teal-ink);
+  }
+
+  /* Chapters */
+  .chapter {
+    padding-block: clamp(64px, 9vw, 120px);
+    scroll-margin-top: calc(var(--header-h) + 64px);
   }
   .row {
     display: grid;
-    grid-template-columns: 1.15fr 1fr;
-    gap: clamp(28px, 5vw, 72px);
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(32px, 6vw, 88px);
     align-items: center;
   }
-  .row.flip .pic {
-    order: 2;
-  }
+  .row.flip .pic { order: 2; }
+
   .pic {
+    position: relative;
+    margin: 0;
+  }
+  /* Offset brand block behind the photo */
+  .pic::before {
+    content: "";
+    position: absolute;
+    inset: 24px -24px -24px 24px;
+    border-radius: var(--radius);
+    background: repeating-linear-gradient(135deg, rgb(66 192 182 / 0.55) 0 2px, transparent 2px 14px);
+    z-index: 0;
+  }
+  .flip .pic::before { inset: 24px 24px -24px -24px; }
+  .frame {
+    position: relative;
+    z-index: 1;
     display: block;
     overflow: hidden;
     border-radius: var(--radius);
+    box-shadow: var(--shadow);
   }
-  .pic :global(img) {
+  .frame :global(img) {
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    transition: transform 0.8s cubic-bezier(.2,.7,.2,1);
+    transition: transform 0.9s cubic-bezier(.2,.7,.2,1);
   }
-  .row:hover .pic :global(img) {
-    transform: scale(1.04);
+  .row:hover .frame :global(img) { transform: scale(1.05); }
+  .badge {
+    position: absolute;
+    z-index: 2;
+    left: -18px;
+    bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    background: var(--navy);
+    color: var(--white);
+    box-shadow: 0 18px 40px -18px rgb(8 21 58 / 0.7);
   }
+  .flip .badge { left: auto; right: -18px; }
+  .badge strong {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1;
+    color: var(--teal-300);
+  }
+  .badge span {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: #d5dcf0;
+  }
+
   .copy {
+    position: relative;
+    z-index: 0;
     display: grid;
     gap: 16px;
     justify-items: start;
   }
-  h2 {
-    font-size: var(--step-4);
+  .big-num {
+    position: absolute;
+    top: -0.62em;
+    right: 0;
+    z-index: -1;
+    font-family: var(--font-display);
+    font-size: clamp(7rem, 14vw, 12rem);
+    font-weight: 600;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgb(66 192 182 / 0.55);
+    pointer-events: none;
+    user-select: none;
   }
-  h2 a {
-    text-decoration: none;
-  }
+  .copy h2 { font-size: var(--step-4); }
+  .copy h2 a { text-decoration: none; }
   .tag {
     font-family: var(--font-display);
     font-style: italic;
@@ -102,30 +317,119 @@ import { img } from '../../lib/images';
     color: var(--navy);
     line-height: 1.2;
   }
-  .intro {
-    color: var(--muted);
+  .intro { color: var(--muted); }
+
+  .backed {
+    width: 100%;
+    display: grid;
+    gap: 10px;
   }
-  .names {
+  .backed-h {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal-ink);
+  }
+  .backed ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     gap: 8px;
   }
-  .names .chip {
-    white-space: normal;
+  .pcard {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 14px 8px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    transition: transform 0.35s cubic-bezier(.2,.7,.2,1), box-shadow 0.35s ease, border-color 0.35s ease;
   }
-  .more {
-    background: var(--navy);
+  .pcard:hover {
+    transform: translateX(4px);
+    border-color: var(--teal);
+    box-shadow: var(--shadow);
+  }
+  .pcard :global(img) {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .pmeta { display: grid; gap: 1px; min-width: 0; }
+  .pmeta strong { font-size: 0.98rem; line-height: 1.3; }
+  .pmeta span {
+    font-size: 0.85rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .parrow { color: var(--teal-ink); transition: transform 0.35s ease; }
+  .pcard:hover .parrow { transform: translateX(3px); }
+  .also {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  /* Five tests */
+  .tests-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+  .tests-list li {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 24px 22px 26px;
+    border-radius: var(--radius);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.12);
+    border-top: 3px solid var(--teal);
+    transition: background 0.35s ease, transform 0.35s cubic-bezier(.2,.7,.2,1);
+  }
+  .tests-list li:hover {
+    background: rgb(255 255 255 / 0.09);
+    transform: translateY(-4px);
+  }
+  .tn {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--teal-300);
+    line-height: 1;
+  }
+  .tests-list strong {
+    font-size: var(--step-1);
     color: var(--white);
   }
+  .tests-list p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #c6d0ec;
+  }
+
+  @media (max-width: 1080px) {
+    .tests-list { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 900px) {
-    .row {
-      grid-template-columns: 1fr;
-    }
-    .row.flip .pic {
-      order: 0;
-    }
+    .row { grid-template-columns: 1fr; }
+    .row.flip .pic { order: 0; }
+    .pic::before { inset: 16px -12px -16px 16px; }
+    .flip .pic::before { inset: 16px 16px -16px -12px; }
+    .badge, .flip .badge { left: 12px; right: auto; bottom: 16px; }
+    .big-num { font-size: 6.5rem; top: -0.5em; }
+  }
+  @media (max-width: 560px) {
+    .tests-list { grid-template-columns: 1fr; }
   }
 </style>

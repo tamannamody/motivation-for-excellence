@@ -166,50 +166,116 @@ p {
 
 .btn {
   --bg: var(--navy);
+  --bg-2: #2a55c4;
   --fg: var(--white);
+  --glow: rgb(28 60 140 / 0.45);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 22px;
+  justify-content: center;
+  gap: 12px;
+  padding: 15px 18px 15px 28px;
   border-radius: 999px;
-  background: var(--bg);
+  background: linear-gradient(135deg, var(--bg) 0%, var(--bg-2) 100%);
   color: var(--fg);
-  font-weight: 600;
+  font-weight: 650;
   font-size: var(--step-0);
+  letter-spacing: 0.01em;
   text-decoration: none;
-  border: 1.5px solid var(--bg);
-  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
-  min-height: 48px;
+  border: 0;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.25) inset, 0 12px 26px -10px var(--glow);
+  transition: transform 0.35s cubic-bezier(.2,.7,.2,1), box-shadow 0.35s ease, filter 0.35s ease;
+  min-height: 52px;
 }
-
+/* Light sweep across the button on hover */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(.2,.7,.2,1);
+}
 .btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  filter: saturate(1.1) brightness(1.05);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.25) inset, 0 20px 36px -12px var(--glow);
 }
-
+.btn:hover::after { transform: translateX(120%); }
+.btn:active { transform: translateY(-1px); }
+.btn:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+}
+/* Arrow sits in its own round chip */
 .btn svg {
-  transition: transform 0.2s ease;
+  box-sizing: content-box;
+  padding: 7px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.18);
+  transition: transform 0.35s cubic-bezier(.2,.7,.2,1), background 0.35s ease;
 }
-
 .btn:hover svg {
-  transform: translateX(3px);
+  transform: translateX(4px);
+  background: rgb(255 255 255 / 0.3);
 }
+/* Buttons without an arrow keep even padding */
+.btn:not(:has(svg)) { padding-inline: 28px; }
 
 .btn--teal {
-  --bg: var(--teal);
+  --bg: #3fbdb3;
+  --bg-2: #6fdcd2;
   --fg: var(--navy-950);
+  --glow: rgb(66 192 182 / 0.6);
 }
+.btn--teal svg { background: rgb(8 21 58 / 0.12); }
+.btn--teal:hover svg { background: rgb(8 21 58 / 0.2); }
 
 .btn--ghost {
-  background: transparent;
+  background: rgb(255 255 255 / 0.6);
   color: var(--navy);
-  border-color: currentColor;
+  box-shadow: inset 0 0 0 2px var(--navy);
+  backdrop-filter: blur(6px);
 }
+.btn--ghost svg { background: rgb(28 60 140 / 0.1); }
+.btn--ghost:hover {
+  background: var(--navy);
+  color: var(--white);
+  box-shadow: inset 0 0 0 2px var(--navy), 0 18px 32px -14px rgb(28 60 140 / 0.5);
+}
+.btn--ghost:hover svg { background: rgb(255 255 255 / 0.2); }
 
 .on-dark .btn--ghost,
 .btn--ghost-light {
-  background: transparent;
+  background: rgb(255 255 255 / 0.08);
   color: var(--white);
-  border-color: rgb(255 255 255 / 0.5);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(6px);
+}
+.on-dark .btn--ghost:hover,
+.btn--ghost-light:hover {
+  background: var(--white);
+  color: var(--navy-950);
+  box-shadow: inset 0 0 0 2px var(--white), 0 18px 32px -14px rgb(0 0 0 / 0.5);
+}
+
+/* Main call to action: a soft, slow glow that draws the eye */
+.btn--pulse {
+  animation: btn-pulse 2.8s ease-in-out infinite;
+}
+.btn--pulse:hover { animation: none; }
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: 0 1px 0 rgb(255 255 255 / 0.25) inset, 0 12px 26px -10px var(--glow), 0 0 0 0 rgb(66 192 182 / 0.45); }
+  50% { box-shadow: 0 1px 0 rgb(255 255 255 / 0.25) inset, 0 12px 26px -10px var(--glow), 0 0 0 10px rgb(66 192 182 / 0); }
+}
+
+.btn--lg {
+  font-size: var(--step-1);
+  min-height: 60px;
+  padding: 18px 20px 18px 32px;
 }
 
 .link-arrow {
@@ -219,7 +285,8 @@ p {
   font-weight: 600;
   color: var(--navy);
   text-decoration: none;
-  border-bottom: 1.5px solid transparent;
+  border-bottom: 2px solid rgb(66 192 182 / 0.6);
+  padding-bottom: 2px;
   transition: border-color 0.2s ease, gap 0.2s ease;
 }
 
@@ -321,4 +388,68 @@ p {
 
 .on-dark .prose p {
   color: #d5dcf0;
+}
+
+/* Decorative section backgrounds. Brand glows on the section itself, a dot
+   field that fades out (::before), and one motif per section (::after).
+   All of it sits behind content and never catches clicks. */
+.bgfx {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background: var(--bgfx, none);
+}
+.bgfx::before,
+.bgfx::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.bgfx::before {
+  inset: 0;
+  background-image: radial-gradient(rgb(28 60 140 / 0.26) 1.3px, transparent 1.8px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(38% 55% at var(--dots-at, 88% 18%), #000 0%, transparent 100%);
+  mask-image: radial-gradient(38% 55% at var(--dots-at, 88% 18%), #000 0%, transparent 100%);
+}
+.bgfx--teal {
+  --bgfx:
+    radial-gradient(48rem 34rem at 4% 6%, rgb(66 192 182 / 0.30), transparent 68%),
+    radial-gradient(40rem 30rem at 98% 55%, rgb(28 60 140 / 0.12), transparent 70%),
+    var(--paper);
+}
+.bgfx--navy {
+  --bgfx:
+    radial-gradient(46rem 32rem at 96% 38%, rgb(28 60 140 / 0.14), transparent 68%),
+    radial-gradient(42rem 30rem at 2% 98%, rgb(66 192 182 / 0.26), transparent 70%),
+    linear-gradient(180deg, var(--paper), var(--paper-2));
+}
+/* Concentric rings, echoing the values circle */
+.bgfx--ring::after {
+  width: clamp(280px, 34vw, 520px);
+  aspect-ratio: 1;
+  right: -4%;
+  top: 4%;
+  border-radius: 50%;
+  border: 2px solid rgb(66 192 182 / 0.75);
+  outline: 1.5px solid rgb(28 60 140 / 0.28);
+  outline-offset: 36px;
+  box-shadow: inset 0 0 0 64px rgb(66 192 182 / 0.07);
+}
+/* Contour lines: fields and terrain */
+.bgfx--contour::after {
+  width: clamp(320px, 44vw, 640px);
+  aspect-ratio: 620 / 420;
+  right: -2%;
+  top: 2%;
+  opacity: 0.8;
+  background: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='620' height='420' viewBox='0 0 620 420' fill='none' stroke='%2342c0b6' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M-20 120 C 110 60, 210 200, 340 130 S 560 70, 640 120'/%3E%3Cpath d='M-20 146 C 110 86, 210 226, 340 156 S 560 96, 640 146'/%3E%3Cpath d='M-20 172 C 110 112, 210 252, 340 182 S 560 122, 640 172'/%3E%3Cpath d='M-20 198 C 110 138, 210 278, 340 208 S 560 148, 640 198'/%3E%3Cpath d='M-20 224 C 110 164, 210 304, 340 234 S 560 174, 640 224'/%3E%3Cpath d='M-20 250 C 110 190, 210 330, 340 260 S 560 200, 640 250'/%3E%3Cpath d='M-20 276 C 110 216, 210 356, 340 286 S 560 226, 640 276'/%3E%3Cpath d='M-20 302 C 110 242, 210 382, 340 312 S 560 252, 640 302'/%3E%3Cpath d='M-20 328 C 110 268, 210 408, 340 338 S 560 278, 640 328'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 35%);
+  mask-image: linear-gradient(90deg, transparent, #000 35%);
+}
+@media (max-width: 760px) {
+  .bgfx--ring::after { right: -40%; top: -6%; opacity: 0.6; }
+  .bgfx--contour::after { right: -30%; opacity: 0.5; }
+  .bgfx::before { --dots-at: 90% 10%; }
 }

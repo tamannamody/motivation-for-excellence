@@ -55,8 +55,8 @@ const marquee = partners.map((p) => p.name);
         their best ideas grow.
       </p>
       <div class="hero-cta">
-        <a class="btn btn--teal" href="/partners/">Meet our {stats.partners} partners <Arrow /></a>
-        <a class="btn btn--ghost-light" href="/about/">Our story</a>
+        <a class="btn btn--teal btn--lg btn--pulse" href="/partners/">Meet our {stats.partners} partners <Arrow /></a>
+        <a class="btn btn--ghost-light btn--lg" href="/about/">Our story</a>
       </div>
     </div>
   </section>
@@ -74,7 +74,7 @@ const marquee = partners.map((p) => p.name);
   </section>
 
   <!-- Mission -->
-  <section class="section">
+  <section class="section bgfx bgfx--teal" style="--dots-at: 8% 85%">
     <div class="wrap mission">
       <div class="reveal mission-card">
         <span class="eyebrow">Our mission</span>
@@ -100,7 +100,7 @@ const marquee = partners.map((p) => p.name);
   </section>
 
   <!-- Areas -->
-  <section class="section areas-sec">
+  <section class="section areas-sec bgfx bgfx--navy bgfx--ring">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">What we fund</span>
@@ -161,7 +161,7 @@ const marquee = partners.map((p) => p.name);
   </section>
 
   <!-- Stories -->
-  <section class="section">
+  <section class="section bgfx bgfx--teal bgfx--contour">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">From the field</span>
@@ -422,7 +422,7 @@ const marquee = partners.map((p) => p.name);
   }
   .bento {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
   }
   .tile {
@@ -432,7 +432,7 @@ const marquee = partners.map((p) => p.name);
     color: var(--white);
     text-decoration: none;
     background: var(--navy);
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 3 / 4;
     transition: transform 0.5s cubic-bezier(.2,.7,.2,1), box-shadow 0.5s cubic-bezier(.2,.7,.2,1);
   }
   .tile::after {
@@ -450,9 +450,13 @@ const marquee = partners.map((p) => p.name);
   }
   .tile:hover::after { border-color: #5a7ceb; }
   .tile-1, .tile-2, .tile-3, .tile-4 { grid-column: auto; grid-row: auto; }
+  @media (max-width: 1000px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .tile { aspect-ratio: 4 / 3; }
+  }
   @media (max-width: 560px) {
     .bento { grid-template-columns: 1fr; }
-    .tile { aspect-ratio: 4 / 3; }
+    .tile { aspect-ratio: 16 / 10; }
   }
   .tile :global(img) {
     position: absolute;
@@ -478,17 +482,21 @@ const marquee = partners.map((p) => p.name);
   .tile-body {
     position: absolute;
     inset: auto 0 0 0;
-    padding: clamp(20px, 3vw, 32px);
+    padding: clamp(18px, 2vw, 24px);
+    padding-right: 72px;
     display: grid;
     gap: 6px;
     transition: transform 0.5s cubic-bezier(.2,.7,.2,1);
   }
   .tile:hover .tile-body { transform: translateY(-5px); }
   .tile h3 {
-    font-size: var(--step-3);
+    font-size: var(--step-2);
+    line-height: 1.15;
   }
   .tile p {
     color: #d9e2f6;
+    font-size: 0.95rem;
+    line-height: 1.45;
     max-width: 40ch;
     opacity: 0.82;
     transition: opacity 0.5s ease;
@@ -503,10 +511,10 @@ const marquee = partners.map((p) => p.name);
   }
   .go {
     position: absolute;
-    right: clamp(20px, 3vw, 32px);
-    bottom: clamp(20px, 3vw, 32px);
-    width: 48px;
-    height: 48px;
+    right: clamp(18px, 2vw, 24px);
+    bottom: clamp(18px, 2vw, 24px);
+    width: 40px;
+    height: 40px;
     display: grid;
     place-items: center;
     border-radius: 50%;
@@ -622,7 +630,7 @@ const marquee = partners.map((p) => p.name);
 
   /* Marquee */
   .marquee-sec {
-    background: var(--white);
+    background: linear-gradient(90deg, var(--teal-50), var(--white) 30%, var(--white) 70%, var(--teal-50));
     border-block: 1px solid var(--line);
     overflow: hidden;
   }
