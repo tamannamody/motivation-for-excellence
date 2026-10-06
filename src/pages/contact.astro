@@ -10,12 +10,44 @@ import { site } from '../lib/site';
   title="Contact"
   description="Contact Motivation for Excellence (MFE) at 1201 Kritika Tower, Chembur, Mumbai, or write to info@motivationforexcellence.org."
 >
-  <PageHero
-    eyebrow="Contact"
-    title="We would like to hear from you."
-    lead="Whether you run a programme, want to co-fund one, or have a question about our work, write to us and the team will get back to you."
-    crumbs={[{ href: '/contact/', label: 'Contact' }]}
-  />
+  <div class="chero bgfx bgfx--teal">
+    <PageHero
+      eyebrow="Contact"
+      title="We would like to hear from you."
+      lead="Whether you run a programme, want to co-fund one, or have a question about our work, write to us and the team will get back to you."
+      crumbs={[{ href: '/contact/', label: 'Contact' }]}
+    />
+    <div class="mail" aria-hidden="true">
+      <span class="mail-sun" />
+      <span class="mail-ring" />
+      <svg class="env" viewBox="0 0 320 240" fill="none">
+        <defs>
+          <linearGradient id="env-front" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#16307a" />
+            <stop offset="1" stop-color="#2a55c4" />
+          </linearGradient>
+        </defs>
+        <rect x="10" y="70" width="300" height="160" rx="18" fill="#0d1f4f" />
+        <g class="letter">
+          <rect x="40" y="18" width="240" height="170" rx="12" fill="#fff" />
+          <g stroke="#42c0b6" stroke-width="5" stroke-linecap="round">
+            <path d="M64 40 l14 -14 M76 40 l14 -14 M88 40 l14 -14" />
+          </g>
+          <rect x="64" y="58" width="150" height="9" rx="4.5" fill="#1c3c8c" opacity="0.85" />
+          <rect x="64" y="80" width="190" height="7" rx="3.5" fill="#c9d3ea" />
+          <rect x="64" y="96" width="170" height="7" rx="3.5" fill="#c9d3ea" />
+          <rect x="64" y="112" width="120" height="7" rx="3.5" fill="#c9d3ea" />
+        </g>
+        <path d="M10 92 L160 170 L310 92 V212 a18 18 0 0 1 -18 18 H28 a18 18 0 0 1 -18 -18 Z" fill="url(#env-front)" />
+        <path d="M10 212 L130 150 M310 212 L190 150" stroke="rgb(255 255 255 / 0.18)" stroke-width="2" />
+        <circle cx="160" cy="170" r="20" fill="#42c0b6" />
+        <path d="M151 170 l6 6 l12 -12" stroke="#08153a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="topic t1"><i />A partnership</span>
+      <span class="topic t2"><i />Co-funding</span>
+      <span class="topic t3"><i />Something else</span>
+    </div>
+  </div>
 
   <section class="section--tight">
     <div class="wrap grid">
@@ -84,6 +116,87 @@ import { site } from '../lib/site';
 </script>
 
 <style>
+  /* Hero illustration: envelope with the three enquiry topics */
+  .chero {
+    position: relative;
+  }
+  .chero :global(.text) {
+    max-width: 700px;
+  }
+  .mail {
+    position: absolute;
+    top: 50%;
+    right: max(var(--gutter), calc((100vw - var(--wrap)) / 2 + var(--gutter)));
+    width: min(34vw, 440px);
+    aspect-ratio: 1;
+    transform: translateY(-44%);
+    pointer-events: none;
+  }
+  .mail-sun {
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #8fe4dc, var(--teal) 72%);
+    opacity: 0.85;
+  }
+  .mail-ring {
+    position: absolute;
+    inset: 2%;
+    border-radius: 50%;
+    border: 1.5px dashed rgb(28 60 140 / 0.3);
+    animation: ring-spin 60s linear infinite;
+  }
+  @keyframes ring-spin {
+    to { transform: rotate(360deg); }
+  }
+  .env {
+    position: absolute;
+    left: 50%;
+    top: 54%;
+    width: 72%;
+    transform: translate(-50%, -50%) rotate(-6deg);
+    filter: drop-shadow(0 26px 30px rgb(8 21 58 / 0.35));
+    overflow: visible;
+  }
+  .letter {
+    animation: letter-rise 5s ease-in-out infinite;
+  }
+  @keyframes letter-rise {
+    0%, 100% { transform: translateY(6px); }
+    50% { transform: translateY(-10px); }
+  }
+  .topic {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--navy);
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 14px 30px -14px rgb(8 21 58 / 0.45);
+    animation: topic-float 6s ease-in-out infinite;
+  }
+  .topic i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+  .t1 { left: -6%; top: 14%; }
+  .t2 { right: -8%; top: 30%; animation-delay: -2s; }
+  .t3 { left: 4%; bottom: 8%; animation-delay: -4s; }
+  @keyframes topic-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @media (max-width: 1100px) {
+    .mail { display: none; }
+  }
+
   .grid {
     display: grid;
     grid-template-columns: 1.4fr 1fr;
@@ -207,9 +320,9 @@ import { site } from '../lib/site';
   }
   .big {
     font-family: var(--font-display);
-    font-size: var(--step-2);
+    font-size: clamp(1.05rem, 0.7rem + 1vw, 1.55rem);
     color: var(--white);
-    word-break: break-word;
+    overflow-wrap: anywhere;
     text-decoration-color: var(--teal);
     text-underline-offset: 6px;
   }
