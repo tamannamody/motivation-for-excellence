@@ -56,7 +56,7 @@ noted below.
 
 ## Open
 
-- **Publishing.** Repo is private. GitHub Pages needs a public repo or a paid
+- **Publishing.** Repo made public on 6 October 2026. GitHub Pages needs a public repo or a paid
   plan; `tamannamody.github.io/motivation-for-excellence/` returns 404 today.
   Options: make it public, use GitHub Pro, or host on Netlify or Cloudflare
   Pages (`public/_redirects` is already in their format).
