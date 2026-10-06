@@ -1,4 +1,5 @@
 ---
+import { link } from '../lib/url';
 import { Image } from 'astro:assets';
 import { site, nav, areas, areaOrder } from '../lib/site';
 import { img } from '../lib/images';
@@ -18,15 +19,15 @@ const year = new Date().getFullYear();
     <div>
       <h2 class="h">Explore</h2>
       <ul>
-        <li><a href="/">Home</a></li>
-        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        <li><a href={link('/')}>Home</a></li>
+        {nav.map((n) => <li><a href={link(n.href)}>{n.label}</a></li>)}
       </ul>
     </div>
 
     <div>
       <h2 class="h">What we fund</h2>
       <ul>
-        {areaOrder.map((a) => <li><a href={`/what-we-fund/${a}/`}>{areas[a].title}</a></li>)}
+        {areaOrder.map((a) => <li><a href={link(`/what-we-fund/${a}/`)}>{areas[a].title}</a></li>)}
       </ul>
     </div>
 
@@ -41,7 +42,7 @@ const year = new Date().getFullYear();
 
   <div class="wrap legal">
     <span>© {year} {site.name}</span>
-    <a href="/privacy/">Privacy</a>
+    <a href={link('/privacy/')}>Privacy</a>
   </div>
 </footer>
 

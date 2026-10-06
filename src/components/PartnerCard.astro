@@ -1,4 +1,5 @@
 ---
+import { link } from '../lib/url';
 import { Image } from 'astro:assets';
 import type { Partner } from '../lib/site';
 import { areas, where, summary } from '../lib/site';
@@ -10,7 +11,7 @@ const place = where(p);
 ---
 
 <a
-  href={`/partners/${p.slug}/`}
+  href={link(`/partners/${p.slug}/`)}
   class="card"
   data-areas={p.areas.join(' ')}
   data-states={(p.panIndia ? ['Pan-India', ...p.states] : p.states).join('|')}

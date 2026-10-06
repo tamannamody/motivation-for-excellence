@@ -1,4 +1,5 @@
 ---
+import { link } from '../../lib/url';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import PartnerCard from '../../components/PartnerCard.astro';
@@ -45,13 +46,13 @@ const breadcrumb = {
       <div class="intro">
         <nav aria-label="Breadcrumb" class="crumbs">
           <ol>
-            <li><a href="/">Home</a></li>
-            <li><a href="/partners/">Partners</a></li>
+            <li><a href={link('/')}>Home</a></li>
+            <li><a href={link('/partners/')}>Partners</a></li>
             <li aria-current="page">{p.name}</li>
           </ol>
         </nav>
         <div class="tags">
-          {p.areas.map((a) => <a class="chip" href={`/what-we-fund/${a}/`}>{areas[a].title}</a>)}
+          {p.areas.map((a) => <a class="chip" href={link(`/what-we-fund/${a}/`)}>{areas[a].title}</a>)}
         </div>
         <h1>{p.name}</h1>
         {p.projectTitle && <p class="project-title">{p.projectTitle}</p>}
@@ -164,8 +165,8 @@ const breadcrumb = {
   }
 
   <nav class="wrap pager" aria-label="Partner navigation">
-    <a href={`/partners/${prev.slug}/`} class="prev"><small>Previous</small><span>{prev.name}</span></a>
-    <a href={`/partners/${next.slug}/`} class="next"><small>Next</small><span>{next.name}</span></a>
+    <a href={link(`/partners/${prev.slug}/`)} class="prev"><small>Previous</small><span>{prev.name}</span></a>
+    <a href={link(`/partners/${next.slug}/`)} class="next"><small>Next</small><span>{next.name}</span></a>
   </nav>
 
   <CtaBand />

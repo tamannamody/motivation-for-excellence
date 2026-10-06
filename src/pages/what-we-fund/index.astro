@@ -1,4 +1,5 @@
 ---
+import { link } from '../../lib/url';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
@@ -64,7 +65,7 @@ const chapters = areaOrder.map((slug, i) => {
       <section id={c.slug} class:list={['chapter', { 'chapter--alt bgfx bgfx--navy': i % 2 === 1 }]}>
         <div class:list={['wrap row', { flip: i % 2 === 1 }]}>
           <figure class="pic reveal">
-            <a href={`/what-we-fund/${c.slug}/`} tabindex="-1" aria-hidden="true" class="frame">
+            <a href={link(`/what-we-fund/${c.slug}/`)} tabindex="-1" aria-hidden="true" class="frame">
               <Image src={img(c.a.image)} alt="" widths={[480, 800, 1100]} sizes="(max-width: 900px) 100vw, 55vw" />
             </a>
             <figcaption class="badge">
@@ -79,7 +80,7 @@ const chapters = areaOrder.map((slug, i) => {
             <span class="big-num" aria-hidden="true">{c.num}</span>
             <span class="eyebrow">Area {c.num}</span>
             <h2>
-              <a href={`/what-we-fund/${c.slug}/`}>{c.a.title}</a>
+              <a href={link(`/what-we-fund/${c.slug}/`)}>{c.a.title}</a>
             </h2>
             <p class="tag">{c.a.tagline}</p>
             <p class="intro">{c.a.intro}</p>
@@ -89,7 +90,7 @@ const chapters = areaOrder.map((slug, i) => {
               <ul>
                 {c.highlights.map((p) => (
                   <li>
-                    <a href={`/partners/${p.slug}/`} class="pcard">
+                    <a href={link(`/partners/${p.slug}/`)} class="pcard">
                       <Image src={img(p.images[0])} alt="" widths={[120, 240]} sizes="64px" loading="lazy" />
                       <span class="pmeta">
                         <strong>{p.name}</strong>
@@ -108,7 +109,7 @@ const chapters = areaOrder.map((slug, i) => {
               )}
             </div>
 
-            <a class="btn" href={`/what-we-fund/${c.slug}/`}>
+            <a class="btn" href={link(`/what-we-fund/${c.slug}/`)}>
               Explore {c.a.short.toLowerCase()} <Arrow />
             </a>
           </div>

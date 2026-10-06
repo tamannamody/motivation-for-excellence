@@ -1,4 +1,5 @@
 ---
+import { link } from '../lib/url';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
@@ -44,7 +45,7 @@ const marquee = partners.map((p) => p.name);
       fetchpriority="high"
     />
     <video class="hero-img hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
-      <source src="/media/hero.mp4" type="video/mp4" />
+      <source src={link('/media/hero.mp4')} type="video/mp4" />
     </video>
     <div class="hero-shade" aria-hidden="true"></div>
     <div class="wrap hero-inner">
@@ -55,8 +56,8 @@ const marquee = partners.map((p) => p.name);
         their best ideas grow.
       </p>
       <div class="hero-cta">
-        <a class="btn btn--teal btn--lg btn--pulse" href="/partners/">Meet our {stats.partners} partners <Arrow /></a>
-        <a class="btn btn--ghost-light btn--lg" href="/about/">Our story</a>
+        <a class="btn btn--teal btn--lg btn--pulse" href={link('/partners/')}>Meet our {stats.partners} partners <Arrow /></a>
+        <a class="btn btn--ghost-light btn--lg" href={link('/about/')}>Our story</a>
       </div>
     </div>
   </section>
@@ -76,7 +77,7 @@ const marquee = partners.map((p) => p.name);
   <!-- Mission -->
   <section class="section bgfx bgfx--teal" style="--dots-at: 8% 85%">
     <div class="wrap mission">
-      <div class="reveal mission-card">
+      <div class="reveal mission-card" style={`--img: url(${link('/media/mission-kids.jpg')})`}>
         <span class="eyebrow">Our mission</span>
         <p class="statement">
           To nurture <mark>values-based excellence</mark> and a passion for helping catalyse improvements in society.
@@ -93,7 +94,7 @@ const marquee = partners.map((p) => p.name);
           <span class="founder-meta">{people.founder.years} · {people.founder.role}</span>
           <p class="founder-tribute">A quiet, self-made man who rose from little and left his life's work to society.</p>
           <p class="founder-vision">He believed excellence lives in the humblest work done extraordinarily well, and built MFE to find it and back it.</p>
-          <a class="link-arrow" href="/about/">Read our story <Arrow size={16} /></a>
+          <a class="link-arrow" href={link('/about/')}>Read our story <Arrow size={16} /></a>
         </figure>
       </div>
     </div>
@@ -112,7 +113,7 @@ const marquee = partners.map((p) => p.name);
           areaOrder.map((slug, i) => {
             const a = areas[slug];
             return (
-              <a href={`/what-we-fund/${slug}/`} class={`tile tile-${i + 1} reveal`}>
+              <a href={link(`/what-we-fund/${slug}/`)} class={`tile tile-${i + 1} reveal`}>
                 <Image src={img(a.image)} alt="" widths={[480, 800, 1100]} sizes="(max-width: 760px) 100vw, 50vw" loading="lazy" />
                 <div class="tile-shade" aria-hidden="true" />
                 <div class="tile-body">
@@ -170,7 +171,7 @@ const marquee = partners.map((p) => p.name);
       <div class="stories">
         {
           featured.map((s, i) => (
-            <a href={`/partners/${s.slug}/`} class="story reveal">
+            <a href={link(`/partners/${s.slug}/`)} class="story reveal">
               <div class="story-media">
                 <Image src={img((s as any).image || s.p.images[0])} alt="" widths={[480, 800, 1200]} sizes="(max-width: 960px) 100vw, 33vw" loading="lazy" />
               </div>
@@ -191,7 +192,7 @@ const marquee = partners.map((p) => p.name);
   <section class="section--tight marquee-sec" aria-labelledby="partners-h">
     <div class="wrap marquee-head">
       <h2 id="partners-h">In good company</h2>
-      <a class="link-arrow" href="/partners/">See all {stats.partners} partners <Arrow size={16} /></a>
+      <a class="link-arrow" href={link('/partners/')}>See all {stats.partners} partners <Arrow size={16} /></a>
     </div>
     <div class="marquee" aria-hidden="true">
       <div class="track">
@@ -204,7 +205,7 @@ const marquee = partners.map((p) => p.name);
 
   <!-- Quote -->
   <section class="section quote-sec">
-    <figure class="narrow quote reveal">
+    <figure class="narrow quote reveal" style={`--img: url(${link('/media/quote-bg.jpg')})`}>
       <div class="q-mark stripes" aria-hidden="true"></div>
       <blockquote>
         We must learn to honor excellence in every socially accepted human activity, however humble the activity, and to
@@ -342,7 +343,7 @@ const marquee = partners.map((p) => p.name);
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: url("/media/mission-kids.jpg") center / cover no-repeat;
+    background: var(--img) center / cover no-repeat;
     opacity: 0.2;
   }
   .mission-card .statement { margin-top: 0; }
@@ -715,7 +716,7 @@ const marquee = partners.map((p) => p.name);
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: url("/media/quote-bg.jpg") center / cover no-repeat;
+    background: var(--img) center / cover no-repeat;
     filter: grayscale(1);
     opacity: 0.17;
   }

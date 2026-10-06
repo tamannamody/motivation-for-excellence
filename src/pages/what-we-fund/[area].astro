@@ -1,4 +1,5 @@
 ---
+import { link } from '../../lib/url';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import PartnerCard from '../../components/PartnerCard.astro';
@@ -61,7 +62,7 @@ const others = areaOrder.filter((o) => o !== slug);
         <div class="wrap">
           <div class="head-row">
             <h2>All {a.short.toLowerCase()} partners</h2>
-            <a class="link-arrow" href={`/partners/?area=${slug}`}>
+            <a class="link-arrow" href={link(`/partners/?area=${slug}`)}>
               Open in the partner directory <Arrow size={16} />
             </a>
           </div>
@@ -81,7 +82,7 @@ const others = areaOrder.filter((o) => o !== slug);
       <div class="others">
         {
           others.map((o) => (
-            <a href={`/what-we-fund/${o}/`} class="other">
+            <a href={link(`/what-we-fund/${o}/`)} class="other">
               <span>{areas[o].title}</span>
               <small>{areas[o].tagline}</small>
               <Arrow size={20} />

@@ -1,4 +1,5 @@
 ---
+import { link, stripBase } from '../lib/url';
 import { Image } from 'astro:assets';
 import { nav } from '../lib/site';
 import { img } from '../lib/images';
@@ -7,13 +8,13 @@ interface Props {
   tone?: 'light' | 'dark';
 }
 const { tone = 'light' } = Astro.props;
-const path = Astro.url.pathname;
+const path = stripBase(Astro.url.pathname);
 const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
 ---
 
 <header class="site-header" data-tone={tone}>
   <div class="wrap bar">
-    <a href="/" class="brand" aria-label="Motivation for Excellence, home">
+    <a href={link('/')} class="brand" aria-label="Motivation for Excellence, home">
       <Image src={img('brand/logo-navy.png')} alt="" class="logo logo--navy" width={196} densities={[1, 2]} loading="eager" />
       <Image src={img('brand/logo-white.png')} alt="" class="logo logo--white" width={196} densities={[1, 2]} loading="eager" />
     </a>
@@ -28,14 +29,14 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
         {
           nav.map((item) => (
             <li>
-              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+              <a href={link(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
                 {item.label}
               </a>
             </li>
           ))
         }
       </ul>
-      <a href="/work-with-us/" class="btn btn--teal btn--pulse nav-cta">Partner with us</a>
+      <a href={link('/work-with-us/')} class="btn btn--teal btn--pulse nav-cta">Partner with us</a>
     </nav>
   </div>
 </header>

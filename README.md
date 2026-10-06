@@ -2,7 +2,7 @@
 
 Rebuild of [motivationforexcellence.org](https://motivationforexcellence.org): a fast static site in Astro that replaces the WordPress build.
 
-- `audit/` holds the audit of the old site, with its evidence.
+- The audit of the old site is kept privately, outside this public repo, because it describes security gaps on the live site.
 - `docs/redesign.md` covers what changed and why, including the peer review.
 - `docs/content-gaps.md` lists what MFE needs to confirm before launch.
 
@@ -14,6 +14,8 @@ npm run dev       # http://localhost:4321
 npm run build     # static site in dist/
 npm run preview   # serve dist/
 ```
+
+**Live preview:** https://tamannamody.github.io/motivation-for-excellence/ deploys from `main` through GitHub Actions (`.github/workflows/deploy.yml`). The preview is marked `noindex`, so search engines leave it alone. A production build (no `BASE_PATH`) targets the real domain.
 
 ## Where things live
 

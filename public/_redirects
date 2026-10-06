@@ -77,7 +77,7 @@
 /bwg_gallery/search/  /partners/society-for-education-action-and-research-in-community-health/  301
 /bwg_gallery/*  /partners/  301
 
-# Theme demo content (shop, campaigns, fake donors, 2015 posts): see audit/README.md. Cloudflare Pages cannot send 410, so these go home.
+# Theme demo content (shop, campaigns, fake donors, 2015 posts): see docs/redesign.md. Cloudflare Pages cannot send 410, so these go home.
 /project/*  /  301
 /product/*  /  301
 /product-category/*  /  301

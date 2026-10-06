@@ -1,6 +1,6 @@
 # Redesign: what changed and why
 
-Built 6 October 2026 from the findings in `audit/README.md`.
+Built 6 October 2026 from the findings of the site audit (kept privately).
 
 ## What peer foundations do
 

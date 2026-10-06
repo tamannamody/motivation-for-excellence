@@ -1,4 +1,5 @@
 ---
+import { link } from '../lib/url';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Arrow from '../components/Arrow.astro';
@@ -47,7 +48,7 @@ import { site } from '../lib/site';
         </label>
         <p class="error" role="alert" hidden data-error>Please add your name, a valid email and a message.</p>
         <button class="btn" type="submit">Send message <Arrow /></button>
-        <p class="note">This opens your email app with the message ready to send. We use your details only to reply. See our <a href="/privacy/">privacy notice</a>.</p>
+        <p class="note">This opens your email app with the message ready to send. We use your details only to reply. See our <a href={link('/privacy/')}>privacy notice</a>.</p>
       </form>
 
       <aside class="info">

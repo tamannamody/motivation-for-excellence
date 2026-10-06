@@ -1,4 +1,5 @@
 ---
+import { link } from '../lib/url';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -12,8 +13,8 @@ const { eyebrow, title, lead, image, imageAlt = '', caption, crumbs = [] } = Ast
       {crumbs.length > 0 && (
         <nav aria-label="Breadcrumb" class="crumbs">
           <ol>
-            <li><a href="/">Home</a></li>
-            {crumbs.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+            <li><a href={link('/')}>Home</a></li>
+            {crumbs.map((c) => <li><a href={link(c.href)}>{c.label}</a></li>)}
           </ol>
         </nav>
       )}

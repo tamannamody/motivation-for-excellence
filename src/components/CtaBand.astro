@@ -1,4 +1,5 @@
 ---
+import { link } from '../lib/url';
 import Arrow from './Arrow.astro';
 interface Props { title?: string; body?: string }
 const {
@@ -16,8 +17,8 @@ const {
         <p class="lead">{body}</p>
       </div>
       <div class="actions">
-        <a class="btn btn--teal btn--lg btn--pulse" href="/work-with-us/">Work with us <Arrow /></a>
-        <a class="btn btn--ghost btn--lg" href="/contact/">Contact the team</a>
+        <a class="btn btn--teal btn--lg btn--pulse" href={link('/work-with-us/')}>Work with us <Arrow /></a>
+        <a class="btn btn--ghost btn--lg" href={link('/contact/')}>Contact the team</a>
       </div>
     </div>
   </div>
